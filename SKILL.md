@@ -79,7 +79,18 @@ uv run --project <skill-dir> --no-dev python <skill-dir>/scripts/bootstrap_spec.
 
 ### 5. 预览、导出与交付
 
-启动 Studio，给出精确入口，等待用户预览。修改布局或文案后重新确认受影响方案并复测。
+**启动 Studio，给出精确入口，等待用户预览。** 这一步不能省：必须真的把 Studio 跑起来，并把命令与访问地址一起交给用户。**不得用渲染出来的文件替代 Studio**——agent 看不见画面，因此不能自己宣布“已经预览通过”。确无交互条件、或用户明确要求直接看文件时，说明原因并请用户选一种方式；若额外提供整片渲染，必须注明它是**非交付物**、以及缩放比例，且不得当作 Studio 的替代。
+
+给出预览前先做关键帧复核：
+
+```bash
+uv run --project <skill-dir> --no-dev python <skill-dir>/scripts/build_keyframe_review.py \
+  <渲染出的成片> <spec-dir>
+```
+
+按 plan 逐段抽关键帧，拼成低分辨率联系表，并给出每帧“本该呈现什么”（布局、模板、上屏文字、beats）。脚本同时判定四边出框与成片帧数是否与计划一致；文字重叠、内容与计划不符、审美必须看联系表。拿不准的帧按 `image` 路径单独看原尺寸。结论与联系表路径写进 `qa/production.json` 的 checks。
+
+修改布局或文案后重新确认受影响方案并复测。
 
 明确同意后进入 FINAL_RENDER，正式导出；运行媒体与最终画面检查，写 `qa/delivery.json` 后进入 DONE。
 

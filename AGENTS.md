@@ -68,6 +68,7 @@ ryan-talking-craft/
 │   ├── project_plan.py                # 确认稿、校验、状态流转
 │   ├── extract_frames.py              # 抽帧
 │   ├── build_video_contact_sheets.py  # 联系表
+│   ├── build_keyframe_review.py       # 关键帧复核：按 plan 抽成片关键帧 + 低分辨率联系表
 │   ├── inspect_media.py               # 媒体元数据
 │   ├── convert_subtitles.py           # 字幕转 Caption JSON
 │   ├── prepare_narration.py           # 口播转连续 WAV

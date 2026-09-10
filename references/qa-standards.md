@@ -11,8 +11,10 @@
 - **出框**：`analyze_frame_signal.py edges <抽帧 images...>`。四边窄条出现成片亮像素（文字、卡片被画面边缘切掉）即 `blocked`；亮舞台背景触发的误报改用 `--roi` 或调 `--luminance-threshold`。
 - **窗口**：画面确认前跑 `analyze_frame_signal.py windows`，见 [visual-planning.md](visual-planning.md)。
 
+**关键帧复核**（给出预览前必做）：`build_keyframe_review.py <渲染出的成片> <spec-dir>`。它按 plan 逐段抽完成态关键帧（默认每段 1 帧、取段内 85% 位置，`--per-segment`／`--include-boundaries` 可加密度），拼成低分辨率联系表，并逐帧附上“本该呈现什么”（布局、模板、上屏文字、beats）。脚本自动判定四边出框与成片帧数是否与 plan 一致；**文字重叠、文字出画、内容与 plan 不符必须逐张看联系表**，逐段比对预期与实际，可疑帧按 `image` 路径单独看原尺寸。低分辨率拼图只用于定位。结论与联系表路径写进 `qa/production.json`。注意：agent 设计了自己的画面，因此“预期”是已知的——看不到预期内容与看不到缺陷是同一件事。
+
 静帧抽样不能替代连续性检查：一帧或几帧的闪屏在抽样里按构造看不见。反过来，数值扫描也不判断内容对错，语义与审美仍要抽帧观看。
-交付阶段：分辨率、fps、时长、解码、音频与实际观看结果。
+交付阶段：分辨率、fps、时长、解码、音频与实际观看结果。交付前重置一次关键帧复核（`build_keyframe_review.py`，正式导出后的文件）与 `validate_render.py`；预览阶段的联系表不能代替交付文件的核对。
 
 v2 使用 project_plan.py validate --visual；旧 validate_design/validate_motion_plan/validate_timeline 只接受旧结构，不直接套到 plan.json。独立媒体检查脚本仍可复用。
 

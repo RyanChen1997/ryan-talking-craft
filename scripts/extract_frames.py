@@ -81,26 +81,7 @@ def extract_frames(config: ExtractConfig) -> ExtractResult:
     for time_value in times:
         clamped = min(max(0.0, time_value), max(0.0, media.duration_seconds - 0.1))
         frame_path = frames_dir / f"{round(clamped * 1000):09d}ms.jpg"
-        run_command(
-            (
-                "ffmpeg",
-                "-hide_banner",
-                "-loglevel",
-                "error",
-                "-ss",
-                f"{clamped:.3f}",
-                "-i",
-                str(media.path),
-                "-frames:v",
-                "1",
-                "-vf",
-                f"scale=w='min({config.width},iw)':h='min({config.width},ih)':force_original_aspect_ratio=decrease:force_divisible_by=2",
-                "-q:v",
-                "2",
-                "-y",
-                str(frame_path),
-            )
-        )
+        extract_frame_at(media.path, clamped, frame_path, width=config.width)
         frames.append((round(clamped, 3), frame_path))
 
     contact_sheet = _make_contact_sheet(tuple(path for _, path in frames), frames_dir)
@@ -112,6 +93,38 @@ def extract_frames(config: ExtractConfig) -> ExtractResult:
     )
     write_json(output_dir / "frame-index.json", {**result.to_dict(), "signature": signature})
     return result
+
+
+def extract_frame_at(
+    input_path: Path,
+    time_seconds: float,
+    output_path: Path,
+    *,
+    width: int = 480,
+) -> Path:
+    """Extract one frame at an exact timestamp, scaled to a bounded long edge."""
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    run_command(
+        (
+            "ffmpeg",
+            "-hide_banner",
+            "-loglevel",
+            "error",
+            "-ss",
+            f"{time_seconds:.3f}",
+            "-i",
+            str(input_path),
+            "-frames:v",
+            "1",
+            "-vf",
+            f"scale=w='min({width},iw)':h='min({width},ih)':force_original_aspect_ratio=decrease:force_divisible_by=2",
+            "-q:v",
+            "2",
+            "-y",
+            str(output_path),
+        )
+    )
+    return output_path
 
 
 def _representative_times(duration: float, sample_count: int) -> tuple[float, ...]:
