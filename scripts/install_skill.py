@@ -13,7 +13,17 @@ from common import TalkingCraftError
 
 FILES = ("SKILL.md", "pyproject.toml", "uv.lock")
 DIRECTORIES = ("references", "scripts", "assets/visual-kit")
-EXCLUDED = {"__pycache__", "node_modules", ".DS_Store", "gallery", "fixtures", "previews", "golden-frames", "golden-manifest.json"}
+EXCLUDED = {
+    ".DS_Store",
+    ".tmp",
+    "__pycache__",
+    "fixtures",
+    "gallery",
+    "golden-frames",
+    "golden-manifest.json",
+    "node_modules",
+    "previews",
+}
 
 
 @dataclass(frozen=True)

@@ -39,6 +39,23 @@ def test_install_is_whitelisted_and_safe(tmp_path: Path) -> None:
     assert (replacement.backup / "user-file").read_text() == "retain in backup"
 
 
+def test_nested_tmp_directories_are_not_installed(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    for directory in ("references", "scripts", "assets/visual-kit"):
+        (source / directory).mkdir(parents=True)
+    (source / "SKILL.md").write_text("---\nname: demo\n---\n", encoding="utf-8")
+    (source / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+    (source / "uv.lock").write_text("", encoding="utf-8")
+    (source / "references/.tmp").mkdir()
+    (source / "references/.tmp/private.txt").write_text("private", encoding="utf-8")
+    (source / "references/runtime.md").write_text("runtime", encoding="utf-8")
+
+    report = install(InstallConfig(source, tmp_path / "skills", dry_run=True))
+
+    assert "references/runtime.md" in report.files
+    assert not any(".tmp" in Path(path).parts for path in report.files)
+
+
 def test_refuses_overlapping_target() -> None:
     with pytest.raises(TalkingCraftError, match="overlap"):
         install(InstallConfig(ROOT, ROOT.parent, force=True))
