@@ -41,11 +41,11 @@ npm run preview
 ./install.sh
 # --skills-dir 是 skills 父目录，不是具体 skill 子目录
 ./install.sh --skills-dir ~/.agents/skills --dry-run
-# 已存在时需要明确覆盖，自动保留带时间戳的备份
-./install.sh --skills-dir ~/.agents/skills --force
+# 若同名 skill 已存在，安装器会询问是否删除并重新安装；只接受 yes 或 no
+./install.sh --skills-dir ~/.agents/skills
 ```
 
-安装白名单直接写在 `install.sh`：`SKILL.md`、`references/`、`scripts/`、`assets/visual-kit/`、`pyproject.toml`、`uv.lock`。其余顶层内容不安装；白名单目录内的 `.tmp`、缓存和 `node_modules` 也会清理。不会覆盖其他 skill。备份在目标 skills 目录下的 `.ryan-talking-craft-backup-*`。
+安装白名单直接写在 `install.sh`：`SKILL.md`、`references/`、`scripts/`、`assets/visual-kit/`、`pyproject.toml`、`uv.lock`。其余顶层内容不安装；白名单目录内的 `.tmp`、缓存和 `node_modules` 也会清理。同名 skill 已存在时，输入 `yes` 会先删除旧目录再安装，输入 `no` 则保留原目录并取消安装。
 
 本轮开发只在临时目录验证安装，没有覆盖本机已安装 skill。
 

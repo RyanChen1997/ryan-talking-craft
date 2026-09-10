@@ -2,6 +2,11 @@
 
 真人口播 Remotion 制作 skill 的源码仓库。制作时先确认内容，再取素材，再选布局 / 动效 / 配色。
 
+## 0. Skill 引用与版本
+
+- **目录引用规则**：AI Agent 处于本项目目录时，如无特殊提示，提到或使用 `ryan-talking-craft` 应直接读取当前项目中的 `SKILL.md`、`references/`、`scripts/` 和 `assets/`；不要改读用户级或其他项目级目录下的同名 skill。
+- **版本记录规则**：该 skill 的唯一版本号记录在根目录 `pyproject.toml` 的 `[project].version` 中。其他文档或源码如需展示版本，必须以该字段为准，不能建立第二套版本来源。
+
 ## 1. 项目目录结构
 
 `templates/` 下模板很多，这里不展开。`references/` 展开。

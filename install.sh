@@ -3,7 +3,6 @@ set -euo pipefail
 
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
 SKILLS_DIR="$HOME/.pi/agent/skills"
-FORCE=false
 DRY_RUN=false
 
 WHITELIST=(
@@ -17,7 +16,7 @@ WHITELIST=(
 
 usage() {
   cat <<'EOF'
-Usage: ./install.sh [--skills-dir DIR] [--force] [--dry-run]
+Usage: ./install.sh [--skills-dir DIR] [--dry-run]
 EOF
 }
 
@@ -27,10 +26,6 @@ while (($#)); do
       [[ $# -ge 2 ]] || { echo "--skills-dir requires a directory" >&2; exit 2; }
       SKILLS_DIR="$2"
       shift 2
-      ;;
-    --force)
-      FORCE=true
-      shift
       ;;
     --dry-run)
       DRY_RUN=true
@@ -78,9 +73,28 @@ TARGET="$SKILLS_DIR/ryan-talking-craft"
 case "$TARGET/" in "$ROOT/"*) echo "Install target must not overlap source repository" >&2; exit 1;; esac
 case "$ROOT/" in "$TARGET/"*) echo "Install target must not overlap source repository" >&2; exit 1;; esac
 
-if [[ -e "$TARGET" ]] && ! $FORCE; then
-  echo "Target exists; inspect --dry-run then pass --force to back up and replace" >&2
-  exit 1
+if [[ -e "$TARGET" ]]; then
+  while true; do
+    printf 'A skill named ryan-talking-craft already exists at %s. Delete it and reinstall? [yes/no]: ' "$TARGET"
+    if ! IFS= read -r answer; then
+      echo
+      echo "Installation cancelled: no confirmation received."
+      exit 1
+    fi
+    case "$answer" in
+      yes)
+        rm -rf -- "$TARGET"
+        break
+        ;;
+      no)
+        echo "Installation cancelled."
+        exit 0
+        ;;
+      *)
+        echo "Please answer yes or no."
+        ;;
+    esac
+  done
 fi
 
 TEMP_DIR="$(mktemp -d "$SKILLS_DIR/.talking-craft-install.XXXXXX")"
@@ -103,16 +117,5 @@ find "$STAGE" -type d \( \
 \) -prune -exec rm -rf {} +
 find "$STAGE" -type f \( -name '*.pyc' -o -name '.DS_Store' \) -delete
 
-BACKUP=""
-if [[ -e "$TARGET" ]]; then
-  BACKUP="$SKILLS_DIR/.ryan-talking-craft-backup-$(date -u +%Y%m%dT%H%M%SZ)-$$"
-  mv "$TARGET" "$BACKUP"
-fi
-
-if ! mv "$STAGE" "$TARGET"; then
-  [[ -z "$BACKUP" ]] || mv "$BACKUP" "$TARGET"
-  exit 1
-fi
-
+mv "$STAGE" "$TARGET"
 printf 'Installed: %s\n' "$TARGET"
-[[ -z "$BACKUP" ]] || printf 'Backup: %s\n' "$BACKUP"

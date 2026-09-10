@@ -30,12 +30,18 @@ def _make_source(tmp_path: Path) -> Path:
     return source
 
 
-def _run(source: Path, skills_dir: Path, *arguments: str) -> subprocess.CompletedProcess[str]:
+def _run(
+    source: Path,
+    skills_dir: Path,
+    *arguments: str,
+    answer: str | None = None,
+) -> subprocess.CompletedProcess[str]:
     return subprocess.run(
         [str(source / "install.sh"), "--skills-dir", str(skills_dir), *arguments],
         check=False,
         capture_output=True,
         text=True,
+        input=answer,
     )
 
 
@@ -62,23 +68,35 @@ def test_install_uses_top_level_whitelist_and_removes_caches(tmp_path: Path) -> 
     assert not (target / "scripts/__pycache__").exists()
 
 
-def test_force_backs_up_existing_install(tmp_path: Path) -> None:
+def test_existing_install_is_kept_when_user_answers_no(tmp_path: Path) -> None:
     source = _make_source(tmp_path)
     skills_dir = tmp_path / "skills"
     assert _run(source, skills_dir).returncode == 0
     target = skills_dir / "ryan-talking-craft"
-    (target / "user-file").write_text("retain", encoding="utf-8")
+    marker = target / "user-file"
+    marker.write_text("retain", encoding="utf-8")
 
-    refused = _run(source, skills_dir)
-    assert refused.returncode == 1
-    assert "--force" in refused.stderr
+    cancelled = _run(source, skills_dir, answer="no\n")
 
-    replaced = _run(source, skills_dir, "--force")
+    assert cancelled.returncode == 0
+    assert "Installation cancelled" in cancelled.stdout
+    assert marker.read_text(encoding="utf-8") == "retain"
+
+
+def test_existing_install_is_deleted_when_user_answers_yes(tmp_path: Path) -> None:
+    source = _make_source(tmp_path)
+    skills_dir = tmp_path / "skills"
+    assert _run(source, skills_dir).returncode == 0
+    target = skills_dir / "ryan-talking-craft"
+    (target / "user-file").write_text("remove", encoding="utf-8")
+
+    replaced = _run(source, skills_dir, answer="invalid\nyes\n")
+
     assert replaced.returncode == 0, replaced.stderr
-    backups = list(skills_dir.glob(".ryan-talking-craft-backup-*"))
-    assert len(backups) == 1
-    assert (backups[0] / "user-file").read_text(encoding="utf-8") == "retain"
+    assert "Please answer yes or no" in replaced.stdout
     assert not (target / "user-file").exists()
+    assert (target / "SKILL.md").is_file()
+    assert not list(skills_dir.glob(".ryan-talking-craft-backup-*"))
 
 
 def test_refuses_overlapping_target(tmp_path: Path) -> None:
@@ -94,12 +112,12 @@ def test_refuses_target_symlink(tmp_path: Path) -> None:
     skills_dir.mkdir()
     (skills_dir / "ryan-talking-craft").symlink_to(source, target_is_directory=True)
 
-    result = _run(source, skills_dir, "--force")
+    result = _run(source, skills_dir)
     assert result.returncode == 1
     assert "symlink" in result.stderr
 
 
-@pytest.mark.parametrize("argument", ["--unknown", "--skills-dir"])
+@pytest.mark.parametrize("argument", ["--unknown", "--force", "--skills-dir"])
 def test_rejects_invalid_arguments(tmp_path: Path, argument: str) -> None:
     source = _make_source(tmp_path)
     result = subprocess.run(
