@@ -9,7 +9,8 @@ WHITELIST=(
   "SKILL.md"
   "references"
   "scripts"
-  "assets/visual-kit"
+  "assets"
+  "tests"
   "pyproject.toml"
   "uv.lock"
 )
