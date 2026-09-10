@@ -1,5 +1,118 @@
 #!/usr/bin/env bash
 set -euo pipefail
-ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
-# Use uv-managed Python without relying on a potentially stale repository .venv.
-exec uv run --no-project --python '>=3.12' python "$ROOT/scripts/install_skill.py" "$@"
+
+ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+SKILLS_DIR="$HOME/.pi/agent/skills"
+FORCE=false
+DRY_RUN=false
+
+WHITELIST=(
+  "SKILL.md"
+  "references"
+  "scripts"
+  "assets/visual-kit"
+  "pyproject.toml"
+  "uv.lock"
+)
+
+usage() {
+  cat <<'EOF'
+Usage: ./install.sh [--skills-dir DIR] [--force] [--dry-run]
+EOF
+}
+
+while (($#)); do
+  case "$1" in
+    --skills-dir)
+      [[ $# -ge 2 ]] || { echo "--skills-dir requires a directory" >&2; exit 2; }
+      SKILLS_DIR="$2"
+      shift 2
+      ;;
+    --force)
+      FORCE=true
+      shift
+      ;;
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "Unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+case "$SKILLS_DIR" in
+  "~") SKILLS_DIR="$HOME" ;;
+  "~/"*) SKILLS_DIR="$HOME/${SKILLS_DIR#\~/}" ;;
+esac
+
+for item in "${WHITELIST[@]}"; do
+  [[ -e "$ROOT/$item" ]] || { echo "Missing whitelist item: $ROOT/$item" >&2; exit 1; }
+done
+
+TARGET="$SKILLS_DIR/ryan-talking-craft"
+if $DRY_RUN; then
+  echo "Target: $TARGET"
+  echo "Whitelist:"
+  printf '  %s\n' "${WHITELIST[@]}"
+  echo "Excluded inside whitelist directories: .tmp, caches, node_modules"
+  exit 0
+fi
+
+mkdir -p "$SKILLS_DIR"
+SKILLS_DIR="$(cd -- "$SKILLS_DIR" && pwd -P)"
+TARGET="$SKILLS_DIR/ryan-talking-craft"
+
+[[ "$SKILLS_DIR" != "/" && "$SKILLS_DIR" != "$HOME" ]] || {
+  echo "Choose a dedicated skills directory, not filesystem root or home" >&2
+  exit 1
+}
+[[ ! -L "$TARGET" ]] || { echo "Refusing to replace a symlink target" >&2; exit 1; }
+case "$TARGET/" in "$ROOT/"*) echo "Install target must not overlap source repository" >&2; exit 1;; esac
+case "$ROOT/" in "$TARGET/"*) echo "Install target must not overlap source repository" >&2; exit 1;; esac
+
+if [[ -e "$TARGET" ]] && ! $FORCE; then
+  echo "Target exists; inspect --dry-run then pass --force to back up and replace" >&2
+  exit 1
+fi
+
+TEMP_DIR="$(mktemp -d "$SKILLS_DIR/.talking-craft-install.XXXXXX")"
+trap 'rm -rf "$TEMP_DIR"' EXIT
+STAGE="$TEMP_DIR/ryan-talking-craft"
+mkdir -p "$STAGE"
+
+for item in "${WHITELIST[@]}"; do
+  destination="$STAGE/$(dirname -- "$item")"
+  mkdir -p "$destination"
+  cp -R "$ROOT/$item" "$destination/"
+done
+
+find "$STAGE" -type d \( \
+  -name .tmp -o \
+  -name __pycache__ -o \
+  -name .pytest_cache -o \
+  -name .ruff_cache -o \
+  -name node_modules \
+\) -prune -exec rm -rf {} +
+find "$STAGE" -type f \( -name '*.pyc' -o -name '.DS_Store' \) -delete
+
+BACKUP=""
+if [[ -e "$TARGET" ]]; then
+  BACKUP="$SKILLS_DIR/.ryan-talking-craft-backup-$(date -u +%Y%m%dT%H%M%SZ)-$$"
+  mv "$TARGET" "$BACKUP"
+fi
+
+if ! mv "$STAGE" "$TARGET"; then
+  [[ -z "$BACKUP" ]] || mv "$BACKUP" "$TARGET"
+  exit 1
+fi
+
+printf 'Installed: %s\n' "$TARGET"
+[[ -z "$BACKUP" ]] || printf 'Backup: %s\n' "$BACKUP"

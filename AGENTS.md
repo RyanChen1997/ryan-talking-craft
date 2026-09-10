@@ -66,7 +66,6 @@ ryan-talking-craft/
 │   ├── inspect_media.py               # 媒体元数据
 │   ├── convert_subtitles.py           # 字幕转 Caption JSON
 │   ├── prepare_narration.py           # 口播转连续 WAV
-│   ├── install_skill.py               # 白名单安装 skill
 │   ├── install_motion_kit.py          # 把 visual-kit 装进成片工程
 │   ├── analyze_blank_regions.py       # 检查空白 / 露底
 │   ├── analyze_motion_preview.py      # 检查短预览运动

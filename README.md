@@ -34,7 +34,7 @@ npm run preview
 
 ## 安装用户级 skill
 
-需要 uv。默认安装到 `~/.pi/agent/skills/ryan-talking-craft`：
+安装逻辑全部位于 `install.sh`，不调用 Python。默认安装到 `~/.pi/agent/skills/ryan-talking-craft`：
 
 ```bash
 ./install.sh --dry-run
@@ -45,7 +45,7 @@ npm run preview
 ./install.sh --skills-dir ~/.agents/skills --force
 ```
 
-安装使用白名单，排除 preview、node_modules、开发文档、图像缓存和旧 Gallery 示例。不会覆盖其他 skill。备份在目标 skills 目录下的 `.ryan-talking-craft-backup-*`。
+安装白名单直接写在 `install.sh`：`SKILL.md`、`references/`、`scripts/`、`assets/visual-kit/`、`pyproject.toml`、`uv.lock`。其余顶层内容不安装；白名单目录内的 `.tmp`、缓存和 `node_modules` 也会清理。不会覆盖其他 skill。备份在目标 skills 目录下的 `.ryan-talking-craft-backup-*`。
 
 本轮开发只在临时目录验证安装，没有覆盖本机已安装 skill。
 
