@@ -26,13 +26,13 @@ ryan-talking-craft/
 ├── references/                        # 制作时按阶段加载的规范
 │   ├── workflow.md                    # 状态机、确认门禁、恢复与回退
 │   ├── project-layout.md              # 成片工程目录与 spec 归属
-│   ├── content-planning.md            # 字幕拆段、上屏文案、内容确认
+│   ├── content-planning.md            # 字幕拆段、上屏文案、内容确认、内容确认稿格式
 │   ├── video-understanding.md         # 抽帧、联系表、预算与缓存
 │   ├── asset-management.md            # 定向搜素材、录制清单、来源责任
 │   ├── visual-principles.md           # 该不该动、怎么选布局与模板
-│   ├── visual-planning.md             # 画面方案：检索模板、写 visual 字段
+│   ├── visual-planning.md             # 画面方案：检索模板、写 visual 字段、画面确认稿格式
 │   ├── color-planning.md              # 按背景和人物画面选注册配色
-│   ├── media-layout.md                # 录屏完整 contain、禁止裁边推近
+│   ├── media-layout.md                # 录屏完整 contain、人物 PIP 取景窗与比例失配取舍
 │   ├── remotion-architecture.md       # 主 Composition、音轨、时间映射
 │   ├── captions-and-audio.md          # 默认字幕、连续口播音轨
 │   ├── data-contracts.md              # plan / assets / state 字段约定
@@ -90,8 +90,6 @@ ryan-talking-craft/
 ├── archive/                           # 旧规范与旧库快照；不安装、不预览、不 import
 └── research/                          # 开发期研究记录（可空；不安装）
 ```
-
-安装白名单：`SKILL.md`、`references/`、`scripts/`、`assets/visual-kit/`、`pyproject.toml`、`uv.lock`。`preview/`、`docs/`、`tests/`、`archive/` 不进入正式 skill。
 
 ## 2. preview 与 skill 的关系
 

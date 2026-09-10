@@ -1,6 +1,6 @@
 // @ts-nocheck
 // Source: video-talkcraft / template/cards/error-retype.tsx
-// Promoted from video-talkcraft staging. Paper-stage, self-contained demo.
+// Promoted from video-talkcraft staging. Demo stage: text, background and accent below are placeholders, not part of the motion. Take the timing/CONFIG into your own scene; do not edit this reference copy.
 // Motion-only: do not embed StageLayout in this file.
 import React, { useLayoutEffect, useRef, useState } from "react";
 import { AbsoluteFill, continueRender, delayRender, useCurrentFrame } from "remotion";

@@ -11,6 +11,15 @@
 - motion.ts、tokens.ts、types.ts：公共运动工具、颜色角色与类型。
 - index.ts：当前库公开导出。
 
+## 模板的两层
+
+每个模板包含两层，处理方式相反：
+
+- **动效本体**：时序表、缓动与逐帧计算、错峰与收尾节奏、DOM 结构。已验证资产，使用时原样保留。
+- **演示语境**：为了能独立预览而写死的演示文案、根节点白色纸面背景、单个写死的强调色。属于占位，接入时必须替换。
+
+所以 templates/ 里的 Template.tsx 不是可直接上屏的成品画面，而是**动效参考**；README 只写适用场景与动效描述，不写接入示例。成片侧从模板**摘取动效本体**到项目自己的场景组件，参考模板保持只读；规程见 skill 的 `references/visual-principles.md`「使用模板」。
+
 代码由独立 preview 与安装后的成片工程共用，不引用 archive 或 preview。运行时依赖由成片工程提供：React 19、Remotion 4、@remotion/media；预览锁定 4.0.522。
 
 旧 ordered-steps / before-after 适配模板和旧 presenter 分区布局已移除，不再进入正式库或预览。其他旧内容仅保留在仓库 archive/legacy，不安装、不预览。
