@@ -73,6 +73,7 @@ ryan-talking-craft/
 │   ├── prepare_narration.py           # 口播转连续 WAV
 │   ├── install_motion_kit.py          # 把 visual-kit 装进成片工程
 │   ├── analyze_blank_regions.py       # 检查空白 / 露底
+│   ├── analyze_frame_signal.py        # 帧级信号：素材运动量剖面、成片连续性、边缘出框
 │   ├── analyze_motion_preview.py      # 检查短预览运动
 │   ├── compare_goldens.py             # 对比 golden 帧
 │   ├── run_visual_qa.py               # 视觉 QA 入口

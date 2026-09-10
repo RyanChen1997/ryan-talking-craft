@@ -14,6 +14,15 @@
 
 录屏只允许时间裁剪；frame range 使用成片帧，source_in/source_out 使用源秒，禁止混淆。完成态要有阅读空间，但不套固定静止上限。
 
+录屏窗口对照源片实测剖面选取，不靠抽帧目测（见 [video-understanding.md](video-understanding.md)「选窗口前先做运动量剖面」）。窗口写进 plan 后运行：
+
+```bash
+uv run --project <skill-dir> --no-dev python <skill-dir>/scripts/analyze_frame_signal.py windows \
+  <spec-dir>/plan.json <spec-dir>/assets.json --root <成片工程根>
+```
+
+它逐条比对本段声明的 source_in/source_out 与源片剖面：窗口越界、素材不可读为 `blocked`；窗口内含有 jump 级跳变（40+）为 `needs_review`。逐条确认后，意图内的操作（页面跳转、切换站点、缩小窗口）用 `--accept <段号>` 记下，非意图的改写窗口。画面确认稿里发出去的窗口必须全部落在 `clear` 或已 `accept` 的集合里。
+
 ## 画面确认稿的输出格式
 
 画面确认稿有两个去向，内容不一样：

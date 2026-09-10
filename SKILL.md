@@ -17,6 +17,7 @@ compatibility: "在用户 Remotion 工程根目录运行；需要 Node.js、uv�
 - 用户录屏／辅助演示视频允许时间截取和不歪曲事实的片段重排，但禁止空间裁切、拉伸、改变宽高比、局部放大或推近。完整画面等比适配，不使用 cover；空间不足调整布局或隐藏人物。
 - 分析用 ROI 不得当作成片裁切授权。主口播人物 PIP 单独遵守人脸与手势安全要求。
 - 不伪造 UI、数据、操作或事实证据，不绕过访问权限。
+- 段落之间默认硬切。整屏淡入淡出、交叉溶解、缩放入场都算转场，只在有明确表达意图时使用并记录在案；未记录的段内亮度瞬变按闪屏缺陷处理。
 - 内容确认前不展开外部素材搜索；画面确认前不全面制作；预览确认前不正式导出。
 - 没有表达作用就不加动效；静态阅读合法，不强制变化频率或逐段自定义动画。
 - 模板是动效参考、参考模板只读：动效本体（时序、缓动、结构）摘取到成片工程自己的场景组件；演示文案、根节点白底和单个写死强调色属占位，替换为本段已确认内容与注入的 `theme`。要改模板本身走 preview 审阅，不在制作中顺手改。
@@ -64,7 +65,7 @@ uv run --project <skill-dir> --no-dev python <skill-dir>/scripts/bootstrap_spec.
 
 先读画面编排原则，再按表达关系筛模板索引，只读候选说明与动态预览，不通看整个库。当前 visual-kit 收录 catalog 中 `status: reviewed` 的动效模板（typography/emphasis、typography/kinetic-type、diagram/data-chart）、五套舞台布局（白板左／右 PIP、录屏全屏、录屏 + 左／右 PIP）、默认网格背景和四套配色。只从 `assets/visual-kit/catalog.json` 选择，不得从归档中擅自加载旧组件，也不得使用未晋级的 preview staging。模板按动效参考使用：摘取动效本体到项目自己的场景组件，参考模板只读；演示文案与演示白底是占位，替换为本段已确认内容与 `theme`（见 `references/visual-principles.md`「使用模板」）。
 
-逐段填写 visual：布局、模板、口播触发与关键展开顺序、媒体源时间范围。全片填写 `background` 与 `palette`：先定背景，再按 `color-planning.md` 用人物口播联系表从已注册方案里选一套，不写进模板，不现场发明 hex。稳定模板复用参数；允许无模板的静态画面。齐全后运行 `advance --target VISUAL_REVIEW`，展示生成的画面稿，必要时提供代表性小样，等待确认。
+逐段填写 visual：布局、模板、口播触发与关键展开顺序、媒体源时间范围。录屏窗口对照源片实测运动量剖面选取，并在写完后用 `analyze_frame_signal.py windows` 核一遍（见 `references/visual-planning.md`）。全片填写 `background` 与 `palette`：先定背景，再按 `color-planning.md` 用人物口播联系表从已注册方案里选一套，不写进模板，不现场发明 hex。稳定模板复用参数；允许无模板的静态画面。齐全后运行 `advance --target VISUAL_REVIEW`，展示生成的画面稿，必要时提供代表性小样，等待确认。
 
 确认后运行 `advance --target BUILDING --user-message '<原话>'`。
 
@@ -74,7 +75,7 @@ uv run --project <skill-dir> --no-dev python <skill-dir>/scripts/bootstrap_spec.
 
 准备连续口播 WAV、字幕 JSON 和静音视觉素材。按批准计划制作，先验证局部动态再做全片检查。不要调用 v1 设计／时间轴校验器直接校验 v2 plan。
 
-验证报告写入 `qa/production.json`，包含真实检查证据、passed 和当前 plan_hash；通过后进入 PREVIEW_REVIEW。报告不是视觉质量的自动证明，必须实际观看。对白板 + PIP 镜头至少检查一帧：人物确实由 `StageLayout.presenter` 的圆角容器裁切，关键文字与动效完整落在 `safe` 内容槽内，而不是按目测偏移。
+验证报告写入 `qa/production.json`，包含真实检查证据、passed 和当前 plan_hash；通过后进入 PREVIEW_REVIEW。报告不是视觉质量的自动证明，必须实际观看。对白板 + PIP 镜头至少检查一帧：人物确实由 `StageLayout.presenter` 的圆角容器裁切，关键文字与动效完整落在 `safe` 内容槽内，而不是按目测偏移。写报告前跑成片连续性扫描与四边出框扫描（`analyze_frame_signal.py continuity`／`edges`），段内未解释的黑帧与亮度瞬变按 blocked 处理；报告里区分已实测与仅目测（见 `references/qa-standards.md`）。
 
 ### 5. 预览、导出与交付
 
