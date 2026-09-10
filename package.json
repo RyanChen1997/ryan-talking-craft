@@ -1,0 +1,15 @@
+{
+  "name": "ryan-talking-craft-workspace",
+  "private": true,
+  "workspaces": [
+    "preview"
+  ],
+  "scripts": {
+    "preview": "npm run dev --workspace preview",
+    "typecheck": "npm run typecheck --workspace preview",
+    "preview:bundle": "npm run build --workspace preview"
+  },
+  "dependencies": {
+    "@remotion/media": "4.0.512"
+  }
+}

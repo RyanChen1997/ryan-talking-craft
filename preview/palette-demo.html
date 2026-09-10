@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>口播动效配色对照</title>
+  <style>
+    :root {
+      --page: #0c0c0e;
+      --ink: #f4efe6;
+      --mute: #9a958c;
+      --rule: rgba(244, 239, 230, 0.12);
+      --canvas: #08080A;
+      --line: 232, 228, 218;
+      --surface: #212225;
+      --text: #edeef0;
+      --muted: #b0b4ba;
+      --border: #363a3f;
+      --primary: #4ccce6;
+      --fill: #00a2c7;
+      --on-fill: #ffffff;
+      --warning: #ff977d;
+      --success: #0bd8b6;
+      --caption: #edeef0;
+      --caption-bg: rgba(17, 17, 19, 0.18);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; background: var(--page); color: var(--ink); }
+    body {
+      font: 15px/1.45 "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", ui-sans-serif, sans-serif;
+    }
+    .wrap { max-width: 1280px; margin: 0 auto; padding: 28px 22px 80px; }
+    h1 { font-size: 28px; font-weight: 650; letter-spacing: -0.03em; margin: 0 0 8px; }
+    .lede { color: var(--mute); max-width: 46em; margin: 0 0 28px; }
+    .lede code { font-size: 0.92em; color: #e8dcc4; }
+    .row { display: grid; grid-template-columns: 320px 1fr; gap: 22px; align-items: start; }
+    @media (max-width: 980px) { .row { grid-template-columns: 1fr; } }
+    .rail h2, .stage-head h2 { font-size: 13px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mute); margin: 0 0 10px; }
+    .group { margin-bottom: 18px; }
+    .card {
+      width: 100%; text-align: left; cursor: pointer; color: inherit;
+      background: transparent; border: 1px solid var(--rule); border-radius: 14px;
+      padding: 12px 12px 11px; margin: 0 0 8px; display: grid; gap: 6px;
+    }
+    .card[aria-pressed="true"] { border-color: rgba(244, 239, 230, 0.42); background: rgba(244, 239, 230, 0.05); }
+    .card b { font-size: 14px; font-weight: 650; }
+    .card p { margin: 0; color: var(--mute); font-size: 12.5px; line-height: 1.4; }
+    .swatches { display: flex; gap: 5px; }
+    .swatches i { width: 18px; height: 18px; border-radius: 999px; display: block; border: 1px solid rgba(255,255,255,0.12); }
+    .stage-frame {
+      background: #050506; border: 1px solid var(--rule); border-radius: 18px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.35);
+    }
+    .stage {
+      position: relative; aspect-ratio: 16 / 9; background: var(--canvas); overflow: hidden;
+    }
+    .grid { position: absolute; inset: 0; }
+    .grid svg { width: 100%; height: 100%; display: block; }
+    .content {
+      position: absolute; inset: 0;
+      display: grid; grid-template-columns: 1fr 210px; padding: 54px 42px 72px 56px; gap: 18px;
+    }
+    .list { display: grid; gap: 10px; align-content: center; }
+    .title { color: var(--text); font-size: clamp(22px, 3.2vw, 34px); font-weight: 750; letter-spacing: -0.03em; margin-bottom: 6px; }
+    .item {
+      display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: center;
+      min-height: 52px; padding: 8px 14px; border-radius: 12px;
+      background: color-mix(in srgb, var(--surface) 88%, transparent);
+      border: 1.5px solid var(--border); color: var(--text);
+    }
+    .item.current { border-color: var(--primary); box-shadow: 0 12px 28px color-mix(in srgb, var(--primary) 22%, transparent); }
+    .item.done .num { background: var(--success); color: #08110e; }
+    .num {
+      width: 28px; height: 28px; border-radius: 8px; display: grid; place-items: center;
+      background: var(--fill); color: var(--on-fill); font-size: 13px; font-weight: 800;
+    }
+    .item.idle .num { background: var(--border); color: var(--muted); }
+    .item small { display: block; color: var(--muted); font-size: 12px; margin-top: 2px; }
+    .pip {
+      align-self: end; justify-self: end; width: 168px; aspect-ratio: 9 / 14;
+      border-radius: 16px; overflow: hidden; position: relative;
+      background: var(--person, #3d5a52);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.45);
+    }
+    .pip svg { width: 100%; height: 72%; display: block; margin-top: 8%; }
+    .pip span {
+      position: absolute; left: 10px; right: 10px; bottom: 10px;
+      font-size: 11px; color: white; text-align: center; text-shadow: 0 1px 4px #000;
+    }
+    .caption {
+      position: absolute; left: 50%; bottom: 28px; transform: translateX(-50%);
+      max-width: 72%; padding: 8px 14px; border-radius: 10px;
+      background: var(--caption-bg); color: var(--caption);
+      font-weight: 650; text-align: center; text-shadow: 0 2px 4px rgba(0,0,0,.55);
+      font-size: 18px;
+    }
+    .meta { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; color: var(--mute); font-size: 12px; border-top: 1px solid var(--rule); }
+    .toggles { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+    .toggles button {
+      background: transparent; color: var(--mute); border: 1px solid var(--rule);
+      border-radius: 999px; padding: 6px 11px; cursor: pointer; font: inherit;
+    }
+    .toggles button[aria-pressed="true"] { color: var(--ink); border-color: rgba(244,239,230,.4); }
+    .notes { margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 800px) { .notes { grid-template-columns: 1fr; } }
+    .note { border: 1px solid var(--rule); border-radius: 14px; padding: 16px 16px 14px; }
+    .note h3 { margin: 0 0 8px; font-size: 15px; }
+    .note p, .note li { color: var(--mute); font-size: 13px; }
+    .note ul { margin: 0; padding-left: 18px; }
+    a { color: #e8dcc4; }
+    .why { margin-top: 6px; font-size: 12px; color: #c9b89a; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>口播动效配色对照</h1>
+    <p class="lede">
+      现有四套看起来怪，主要不是“少了一点饱和度”，而是色相选错了。黑底透视网格的线是暖白
+      <code>rgb(232,228,218)</code>，默认却叠了一层偏紫的玻璃强调；这正是常见的 AI 紫，也和暖网格打架。
+      下面四套候选不再现场发明 hex，而是按 <a href="https://www.radix-ui.com/colors/docs/palette-composition/composing-a-palette">Radix Colors</a>
+      的灰阶+强调配对，再对照口播/直播 overlay 的 60–30–10：大面积近黑、卡片中性、强调只用一色。
+    </p>
+
+    <div class="row">
+      <aside class="rail">
+        <div class="group">
+          <h2>检索后的候选</h2>
+          <div id="proposed"></div>
+        </div>
+        <div class="group">
+          <h2>现有四套（对照）</h2>
+          <div id="current"></div>
+        </div>
+      </aside>
+
+      <section>
+        <div class="stage-head">
+          <h2>16:9 口播小样 · 点左侧切换</h2>
+          <div class="toggles">
+            <button type="button" data-person="cool" aria-pressed="true">人物偏冷/黑灰</button>
+            <button type="button" data-person="warm" aria-pressed="false">人物偏暖/钨丝</button>
+          </div>
+        </div>
+        <div class="stage-frame">
+          <div class="stage" id="stage">
+            <div class="grid" aria-hidden="true">
+              <svg viewBox="0 0 1280 720" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stop-color="rgb(var(--line))" stop-opacity="0.05" />
+                    <stop offset="0.45" stop-color="rgb(var(--line))" stop-opacity="0.16" />
+                    <stop offset="1" stop-color="rgb(var(--line))" stop-opacity="0.3" />
+                  </linearGradient>
+                </defs>
+                <rect width="1280" height="720" fill="var(--canvas)" />
+                <g stroke="url(#g)" stroke-width="2">
+                  <line x1="640" y1="-1000" x2="-80" y2="800" />
+                  <line x1="640" y1="-1000" x2="180" y2="800" />
+                  <line x1="640" y1="-1000" x2="440" y2="800" />
+                  <line x1="640" y1="-1000" x2="640" y2="800" />
+                  <line x1="640" y1="-1000" x2="840" y2="800" />
+                  <line x1="640" y1="-1000" x2="1100" y2="800" />
+                  <line x1="640" y1="-1000" x2="1360" y2="800" />
+                </g>
+                <g stroke="rgb(var(--line))" stroke-width="2">
+                  <line x1="0" y1="120" x2="1280" y2="120" stroke-opacity="0.12" />
+                  <line x1="0" y1="210" x2="1280" y2="210" stroke-opacity="0.16" />
+                  <line x1="0" y1="310" x2="1280" y2="310" stroke-opacity="0.2" />
+                  <line x1="0" y1="430" x2="1280" y2="430" stroke-opacity="0.24" />
+                  <line x1="0" y1="575" x2="1280" y2="575" stroke-opacity="0.3" />
+                </g>
+              </svg>
+            </div>
+            <div class="content">
+              <div class="list">
+                <div class="title">三个步骤</div>
+                <div class="item done"><span class="num">✓</span><div>收集<small>先把材料备齐</small></div></div>
+                <div class="item current"><span class="num">2</span><div>筛选<small>当前项强调色只来自 palette</small></div></div>
+                <div class="item idle"><span class="num">3</span><div>输出<small>完成态留阅读时间</small></div></div>
+              </div>
+              <div class="pip" id="pip">
+                <svg viewBox="0 0 100 150">
+                  <circle cx="50" cy="38" r="22" fill="#d7c4b0" />
+                  <path d="M12 150V108Q12 72 50 72Q88 72 88 108V150" fill="#d7c4b0" />
+                </svg>
+                <span>人物占位</span>
+              </div>
+            </div>
+            <div class="caption">字幕仍是白字浅底，不跟强调色抢</div>
+          </div>
+          <div class="meta">
+            <span id="meta-name">—</span>
+            <span id="meta-src">—</span>
+          </div>
+        </div>
+        <p class="why" id="why"></p>
+      </section>
+    </div>
+
+    <div class="notes">
+      <article class="note">
+        <h3>网上实际在用的规则</h3>
+        <ul>
+          <li>Radix：灰阶 1–2 做底、3–5 做卡片、6–8 做线、9–10 做实心强调、11/12 做字。青/蓝/金用白字；琥珀/黄/天蓝实心块要用深色字。</li>
+          <li>直播/口播 overlay：近黑底 + 一层中性卡片 + <b>一个</b>强调色。常见是青/琥珀，不是紫。</li>
+          <li>中文口播字幕习惯是白字、浅底、重点用黄，而不是整卡换品牌紫。</li>
+          <li>对比度按正文约 4.5:1 来，压缩后的 720p 还要更分得开。</li>
+        </ul>
+      </article>
+      <article class="note">
+        <h3>现有四套为什么怪</h3>
+        <ul>
+          <li><b>冷紫玻璃</b>：<code>#8A8AE8</code> 是典型 AI 紫，和暖白网格互补失败，也不是 overlay 常用色。</li>
+          <li><b>铜暖玻璃</b>：<code>#D4925A</code> 处在棕和橙之间，既不够金、也不够琥珀，当前项发脏。</li>
+          <li><b>纸面墨</b>：浅卡贴在科幻网格上，比喻混了；强调还带着紫。</li>
+          <li><b>日间纸</b>：蓝 <code>#2855F5</code> + 粉 <code>#E5359A</code> 是旧 defaultTheme 残留，不像一套方案。</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+
+  <script>
+    const proposed = [
+      {
+        id: "grid-hud-cyan@1",
+        name: "网格 HUD 青",
+        kind: "proposed",
+        src: "Radix slate + cyan · overlay 常用冷强调",
+        why: "暖白网格上用青，是互补色，也是科技口播/HUD 最常见的一对。实心块用 cyan9（白字），描边和当前项用更亮的 cyan11。",
+        person: "cool",
+        tokens: {
+          canvas: "#08080A", surface: "#212225", text: "#edeef0", muted: "#b0b4ba",
+          border: "#363a3f", primary: "#4ccce6", fill: "#00a2c7", onFill: "#ffffff",
+          warning: "#ff977d", success: "#0bd8b6", caption: "#edeef0"
+        }
+      },
+      {
+        id: "grid-cinema-amber@1",
+        name: "网格电影琥珀",
+        kind: "proposed",
+        src: "Radix sand + amber · 中文口播重点黄",
+        why: "琥珀跟网格暖白线、钨丝灯光、黄字重点是同一家族。Radix 规定 amber9 实心块必须配深色字，所以数字徽标是深墨，不是白。",
+        person: "warm",
+        tokens: {
+          canvas: "#08080A", surface: "#222221", text: "#eeeeec", muted: "#b5b3ad",
+          border: "#3b3a37", primary: "#ffca16", fill: "#ffc53d", onFill: "#16120c",
+          warning: "#e54d2e", success: "#1fd8a4", caption: "#eeeeec"
+        }
+      },
+      {
+        id: "grid-neutral-gold@1",
+        name: "网格中性金",
+        kind: "proposed",
+        src: "Radix sand + gold · 低彩度阅读",
+        why: "人物已经很花、或上屏字多时，不要再上青/琥珀。gold11 只做轻强调，卡片保持沙灰，让口播和文字先被看见。",
+        person: "cool",
+        tokens: {
+          canvas: "#08080A", surface: "#222221", text: "#eeeeec", muted: "#b5b3ad",
+          border: "#3b3a37", primary: "#cbb99f", fill: "#978365", onFill: "#ffffff",
+          warning: "#ec6142", success: "#27b08b", caption: "#eeeeec"
+        }
+      },
+      {
+        id: "paper-day@1",
+        name: "纸面日间",
+        kind: "proposed",
+        src: "Radix sand + amber · 不用网格时",
+        why: "浅底只在明确关掉透视网格时用。墨色正文 + 琥珀强调，去掉旧主题的电蓝和品红。",
+        person: "warm",
+        light: true,
+        tokens: {
+          canvas: "#f9f9f8", surface: "#ffffff", text: "#21201c", muted: "#63635e",
+          border: "#dad9d6", primary: "#ab6400", fill: "#ffc53d", onFill: "#4f3422",
+          warning: "#e54d2e", success: "#218358", caption: "#ffffff",
+          captionBg: "rgba(17,17,19,0.42)"
+        }
+      }
+    ];
+
+    const current = [
+      {
+        id: "grid-glass-violet@1",
+        name: "现有 · 冷紫玻璃",
+        kind: "current",
+        src: "当前默认",
+        why: "紫强调是 AI 默认色，和暖网格不亲。",
+        tokens: {
+          canvas: "#08080A", surface: "#1A1C24", text: "#F2EDE3", muted: "#A8A296",
+          border: "rgba(240,235,225,0.22)", primary: "#8A8AE8", fill: "#8A8AE8", onFill: "#F7F4EE",
+          warning: "#D96A52", success: "#5FA87A", caption: "#F7F4EE"
+        }
+      },
+      {
+        id: "grid-glass-copper@1",
+        name: "现有 · 铜暖玻璃",
+        kind: "current",
+        src: "当前暖方案",
+        why: "铜偏脏，不如 Radix 琥珀干净。",
+        tokens: {
+          canvas: "#08080A", surface: "#1C1916", text: "#F2EDE3", muted: "#B4A898",
+          border: "rgba(240,228,210,0.22)", primary: "#D4925A", fill: "#D4925A", onFill: "#1A120C",
+          warning: "#E07050", success: "#6FA87A", caption: "#F7F4EE"
+        }
+      },
+      {
+        id: "grid-paper-ink@1",
+        name: "现有 · 纸面墨",
+        kind: "current",
+        src: "深底浅卡",
+        why: "浅卡贴在网格上，像两套设计叠在一起。",
+        tokens: {
+          canvas: "#08080A", surface: "#F3EFE6", text: "#F2EDE3", muted: "#6B665E",
+          border: "#DDD7CC", primary: "#4F5FCF", fill: "#4F5FCF", onFill: "#F7F4EE",
+          warning: "#C2452F", success: "#2F7A56", caption: "#F7F4EE"
+        }
+      },
+      {
+        id: "paper-day@1",
+        name: "现有 · 日间纸",
+        kind: "current",
+        src: "旧 defaultTheme",
+        why: "蓝加粉是旧主题残留。",
+        light: true,
+        tokens: {
+          canvas: "#F7F5EF", surface: "#FFFFFF", text: "#26221C", muted: "#6B665E",
+          border: "#DDD7CC", primary: "#2855F5", fill: "#2855F5", onFill: "#FFFFFF",
+          warning: "#E1493F", success: "#26845B", caption: "#FFFFFF",
+          captionBg: "rgba(16,18,23,0.42)"
+        }
+      }
+    ];
+
+    const all = [...proposed, ...current];
+    let selected = proposed[0].id;
+    let person = "cool";
+
+    const hex = (t) => [t.fill, t.surface, t.primary, t.text];
+
+    function renderList(target, items) {
+      target.innerHTML = items.map((p) => `
+        <button class="card" type="button" data-id="${p.id}" aria-pressed="${p.id === selected}">
+          <b>${p.name}</b>
+          <div class="swatches">${hex(p.tokens).map((c) => `<i style="background:${c}"></i>`).join("")}</div>
+          <p>${p.src}</p>
+        </button>
+      `).join("");
+    }
+
+    function apply(p) {
+      const t = p.tokens;
+      const root = document.documentElement.style;
+      root.setProperty("--canvas", t.canvas);
+      root.setProperty("--surface", t.surface);
+      root.setProperty("--text", t.text);
+      root.setProperty("--muted", t.muted);
+      root.setProperty("--border", t.border);
+      root.setProperty("--primary", t.primary);
+      root.setProperty("--fill", t.fill);
+      root.setProperty("--on-fill", t.onFill);
+      root.setProperty("--warning", t.warning);
+      root.setProperty("--success", t.success);
+      root.setProperty("--caption", t.caption);
+      root.setProperty("--caption-bg", t.captionBg || "rgba(17,17,19,0.18)");
+      root.setProperty("--person", person === "warm" ? "#6a4a32" : "#3d5a52");
+      document.getElementById("meta-name").textContent = p.name;
+      document.getElementById("meta-src").textContent = p.src;
+      document.getElementById("why").textContent = p.why;
+      document.querySelector(".grid").style.display = p.light ? "none" : "block";
+      document.querySelector(".stage").style.background = t.canvas;
+      document.querySelectorAll(".card").forEach((el) => {
+        el.setAttribute("aria-pressed", String(el.dataset.id === p.id));
+      });
+    }
+
+    renderList(document.getElementById("proposed"), proposed);
+    renderList(document.getElementById("current"), current);
+    apply(all[0]);
+
+    document.querySelector(".rail").addEventListener("click", (event) => {
+      const btn = event.target.closest(".card");
+      if (!btn) return;
+      selected = btn.dataset.id;
+      apply(all.find((p) => p.id === selected));
+    });
+
+    document.querySelector(".toggles").addEventListener("click", (event) => {
+      const btn = event.target.closest("button");
+      if (!btn) return;
+      person = btn.dataset.person;
+      document.querySelectorAll(".toggles button").forEach((el) => {
+        el.setAttribute("aria-pressed", String(el === btn));
+      });
+      apply(all.find((p) => p.id === selected));
+    });
+  </script>
+</body>
+</html>

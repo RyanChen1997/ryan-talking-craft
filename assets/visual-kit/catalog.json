@@ -1,0 +1,621 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "id": "perspective-grid@1",
+      "type": "background",
+      "stage": "dark",
+      "status": "restored-user-preference",
+      "readme": "background/perspective-grid/README.md",
+      "code": "background/perspective-grid/Background.tsx"
+    },
+    {
+      "id": "grid-hud-cyan@1",
+      "type": "palette",
+      "stage": "dark",
+      "accentFamily": "cool",
+      "cardTreatment": "glass",
+      "compatibleBackgrounds": [
+        "perspective-grid@1"
+      ],
+      "status": "engineering-baseline",
+      "readme": "palettes/grid-hud-cyan/README.md",
+      "code": "palettes/grid-hud-cyan/palette.ts"
+    },
+    {
+      "id": "grid-cinema-amber@1",
+      "type": "palette",
+      "stage": "dark",
+      "accentFamily": "warm",
+      "cardTreatment": "glass",
+      "compatibleBackgrounds": [
+        "perspective-grid@1"
+      ],
+      "status": "engineering-baseline",
+      "readme": "palettes/grid-cinema-amber/README.md",
+      "code": "palettes/grid-cinema-amber/palette.ts"
+    },
+    {
+      "id": "grid-neutral-gold@1",
+      "type": "palette",
+      "stage": "dark",
+      "accentFamily": "neutral",
+      "cardTreatment": "glass",
+      "compatibleBackgrounds": [
+        "perspective-grid@1"
+      ],
+      "status": "engineering-baseline",
+      "readme": "palettes/grid-neutral-gold/README.md",
+      "code": "palettes/grid-neutral-gold/palette.ts"
+    },
+    {
+      "id": "paper-day@1",
+      "type": "palette",
+      "stage": "light",
+      "accentFamily": "warm",
+      "cardTreatment": "paper",
+      "compatibleBackgrounds": [
+        "none"
+      ],
+      "status": "engineering-baseline",
+      "readme": "palettes/paper-day/README.md",
+      "code": "palettes/paper-day/palette.ts"
+    },
+    {
+      "id": "converging-arrows@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "emphasis"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/emphasis/converging-arrows/README.md",
+      "code": "templates/typography/emphasis/converging-arrows/Template.tsx"
+    },
+    {
+      "id": "corner-bracket-frame@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "emphasis"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/emphasis/corner-bracket-frame/README.md",
+      "code": "templates/typography/emphasis/corner-bracket-frame/Template.tsx"
+    },
+    {
+      "id": "hand-drawn-ellipse@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "emphasis"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/emphasis/hand-drawn-ellipse/README.md",
+      "code": "templates/typography/emphasis/hand-drawn-ellipse/Template.tsx"
+    },
+    {
+      "id": "ink-underline@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "emphasis"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/emphasis/ink-underline/README.md",
+      "code": "templates/typography/emphasis/ink-underline/Template.tsx"
+    },
+    {
+      "id": "quote-hold-arrow@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "emphasis"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/emphasis/quote-hold-arrow/README.md",
+      "code": "templates/typography/emphasis/quote-hold-arrow/Template.tsx"
+    },
+    {
+      "id": "strike-and-replace@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "emphasis"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/emphasis/strike-and-replace/README.md",
+      "code": "templates/typography/emphasis/strike-and-replace/Template.tsx"
+    },
+    {
+      "id": "alt-block-lines@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/alt-block-lines/README.md",
+      "code": "templates/typography/kinetic-type/alt-block-lines/Template.tsx"
+    },
+    {
+      "id": "count-badge-title@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/count-badge-title/README.md",
+      "code": "templates/typography/kinetic-type/count-badge-title/Template.tsx"
+    },
+    {
+      "id": "countdown-arc-scatter@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/countdown-arc-scatter/README.md",
+      "code": "templates/typography/kinetic-type/countdown-arc-scatter/Template.tsx"
+    },
+    {
+      "id": "error-retype@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/error-retype/README.md",
+      "code": "templates/typography/kinetic-type/error-retype/Template.tsx"
+    },
+    {
+      "id": "flying-words@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "dark",
+      "readme": "templates/typography/kinetic-type/flying-words/README.md",
+      "code": "templates/typography/kinetic-type/flying-words/Template.tsx"
+    },
+    {
+      "id": "impact-open-title@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/impact-open-title/README.md",
+      "code": "templates/typography/kinetic-type/impact-open-title/Template.tsx"
+    },
+    {
+      "id": "keyword-pop-highlight@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/keyword-pop-highlight/README.md",
+      "code": "templates/typography/kinetic-type/keyword-pop-highlight/Template.tsx"
+    },
+    {
+      "id": "lead-word-zoom-assemble@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/lead-word-zoom-assemble/README.md",
+      "code": "templates/typography/kinetic-type/lead-word-zoom-assemble/Template.tsx"
+    },
+    {
+      "id": "line-by-line-slide@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/line-by-line-slide/README.md",
+      "code": "templates/typography/kinetic-type/line-by-line-slide/Template.tsx"
+    },
+    {
+      "id": "outline-box-title@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/outline-box-title/README.md",
+      "code": "templates/typography/kinetic-type/outline-box-title/Template.tsx"
+    },
+    {
+      "id": "per-character-rise@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/per-character-rise/README.md",
+      "code": "templates/typography/kinetic-type/per-character-rise/Template.tsx"
+    },
+    {
+      "id": "quote-bracket-pull@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/quote-bracket-pull/README.md",
+      "code": "templates/typography/kinetic-type/quote-bracket-pull/Template.tsx"
+    },
+    {
+      "id": "quote-card@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/quote-card/README.md",
+      "code": "templates/typography/kinetic-type/quote-card/Template.tsx"
+    },
+    {
+      "id": "slab-punch-title@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/slab-punch-title/README.md",
+      "code": "templates/typography/kinetic-type/slab-punch-title/Template.tsx"
+    },
+    {
+      "id": "soft-blur-in@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/soft-blur-in/README.md",
+      "code": "templates/typography/kinetic-type/soft-blur-in/Template.tsx"
+    },
+    {
+      "id": "speed-slab-title@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/speed-slab-title/README.md",
+      "code": "templates/typography/kinetic-type/speed-slab-title/Template.tsx"
+    },
+    {
+      "id": "split-text-stagger@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/split-text-stagger/README.md",
+      "code": "templates/typography/kinetic-type/split-text-stagger/Template.tsx"
+    },
+    {
+      "id": "step-flow-horizontal@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "dark",
+      "readme": "templates/typography/kinetic-type/step-flow-horizontal/README.md",
+      "code": "templates/typography/kinetic-type/step-flow-horizontal/Template.tsx"
+    },
+    {
+      "id": "title-demote-to-label@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/title-demote-to-label/README.md",
+      "code": "templates/typography/kinetic-type/title-demote-to-label/Template.tsx"
+    },
+    {
+      "id": "tracking-in@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/tracking-in/README.md",
+      "code": "templates/typography/kinetic-type/tracking-in/Template.tsx"
+    },
+    {
+      "id": "type-contrast-emphasis@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/type-contrast-emphasis/README.md",
+      "code": "templates/typography/kinetic-type/type-contrast-emphasis/Template.tsx"
+    },
+    {
+      "id": "typewriter-reveal@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/typewriter-reveal/README.md",
+      "code": "templates/typography/kinetic-type/typewriter-reveal/Template.tsx"
+    },
+    {
+      "id": "word-slot-cycle@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "kinetic-type"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/kinetic-type/word-slot-cycle/README.md",
+      "code": "templates/typography/kinetic-type/word-slot-cycle/Template.tsx"
+    },
+    {
+      "id": "bar-chart-growth@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/bar-chart-growth/README.md",
+      "code": "templates/diagram/data-chart/bar-chart-growth/Template.tsx"
+    },
+    {
+      "id": "chart-grow@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/chart-grow/README.md",
+      "code": "templates/diagram/data-chart/chart-grow/Template.tsx"
+    },
+    {
+      "id": "chip-grid-single-select@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/chip-grid-single-select/README.md",
+      "code": "templates/diagram/data-chart/chip-grid-single-select/Template.tsx"
+    },
+    {
+      "id": "info-term-card@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/info-term-card/README.md",
+      "code": "templates/diagram/data-chart/info-term-card/Template.tsx"
+    },
+    {
+      "id": "line-chart-story-draw@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/line-chart-story-draw/README.md",
+      "code": "templates/diagram/data-chart/line-chart-story-draw/Template.tsx"
+    },
+    {
+      "id": "map-route-pin@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/map-route-pin/README.md",
+      "code": "templates/diagram/data-chart/map-route-pin/Template.tsx"
+    },
+    {
+      "id": "metric-with-sparkline@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/metric-with-sparkline/README.md",
+      "code": "templates/diagram/data-chart/metric-with-sparkline/Template.tsx"
+    },
+    {
+      "id": "number-counter@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/number-counter/README.md",
+      "code": "templates/diagram/data-chart/number-counter/Template.tsx"
+    },
+    {
+      "id": "number-slab-pop@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/number-slab-pop/README.md",
+      "code": "templates/diagram/data-chart/number-slab-pop/Template.tsx"
+    },
+    {
+      "id": "numbered-step-stack@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/numbered-step-stack/README.md",
+      "code": "templates/diagram/data-chart/numbered-step-stack/Template.tsx"
+    },
+    {
+      "id": "source-converge@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "dark",
+      "readme": "templates/diagram/data-chart/source-converge/README.md",
+      "code": "templates/diagram/data-chart/source-converge/Template.tsx"
+    },
+    {
+      "id": "step-timeline-vertical@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/step-timeline-vertical/README.md",
+      "code": "templates/diagram/data-chart/step-timeline-vertical/Template.tsx"
+    },
+    {
+      "id": "ui-prop-theater@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/ui-prop-theater/README.md",
+      "code": "templates/diagram/data-chart/ui-prop-theater/Template.tsx"
+    },
+    {
+      "id": "unit-grid-proportion@1",
+      "type": "template",
+      "carrier": "diagram",
+      "informationRelations": [
+        "data-chart"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/diagram/data-chart/unit-grid-proportion/README.md",
+      "code": "templates/diagram/data-chart/unit-grid-proportion/Template.tsx"
+    },
+    {
+      "id": "whiteboard-pip-right@1",
+      "type": "layout",
+      "status": "reviewed",
+      "variant": "whiteboard-pip-right",
+      "readme": "layouts/stage/README.md",
+      "code": "layouts/stage/Layout.tsx"
+    },
+    {
+      "id": "whiteboard-pip-left@1",
+      "type": "layout",
+      "status": "reviewed",
+      "variant": "whiteboard-pip-left",
+      "readme": "layouts/stage/README.md",
+      "code": "layouts/stage/Layout.tsx"
+    },
+    {
+      "id": "screen-full@1",
+      "type": "layout",
+      "status": "reviewed",
+      "variant": "screen-full",
+      "readme": "layouts/stage/README.md",
+      "code": "layouts/stage/Layout.tsx"
+    },
+    {
+      "id": "screen-pip-right@1",
+      "type": "layout",
+      "status": "reviewed",
+      "variant": "screen-pip-right",
+      "readme": "layouts/stage/README.md",
+      "code": "layouts/stage/Layout.tsx"
+    },
+    {
+      "id": "screen-pip-left@1",
+      "type": "layout",
+      "status": "reviewed",
+      "variant": "screen-pip-left",
+      "readme": "layouts/stage/README.md",
+      "code": "layouts/stage/Layout.tsx"
+    }
+  ]
+}
