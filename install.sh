@@ -118,5 +118,8 @@ find "$STAGE" -type d \( \
 \) -prune -exec rm -rf {} +
 find "$STAGE" -type f \( -name '*.pyc' -o -name '.DS_Store' \) -delete
 
+# README 展示素材不随 skill 安装
+rm -rf -- "$STAGE/assets/readme"
+
 mv "$STAGE" "$TARGET"
 printf 'Installed: %s\n' "$TARGET"
