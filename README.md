@@ -16,5 +16,10 @@
 
 ## 效果对比
 
-- `before-cn`：占位，视频上传后替换
-- `before-en`：占位，视频上传后替换
+**before-cn**
+
+<video src="https://github.com/user-attachments/assets/dddce342-bcd1-42da-b1a9-6c6f2b95db03" controls></video>
+
+**before-en**
+
+<video src="https://github.com/user-attachments/assets/f40c7b25-127e-4bb7-a9e2-ccd5879bf4f2" controls></video>
