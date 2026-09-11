@@ -4,6 +4,27 @@
 
 核心原则：**内容先于画面**。先确认说什么、要什么素材，再决定画面怎么动；动效来自已验证的模板库，而不是每条视频重新研究动画。
 
+同一段中文口播：左边是原始素材，右边是用 ryan-talking-craft 自动包装后的成片（含动效与字幕）。
+
+<table>
+<tr>
+<td width="50%">
+
+**before-cn｜原始口播**
+
+<video src="https://github.com/user-attachments/assets/dddce342-bcd1-42da-b1a9-6c6f2b95db03" controls></video>
+
+</td>
+<td width="50%">
+
+**after-cn｜成片**
+
+<video src="https://github.com/user-attachments/assets/a14930fb-7ac1-425f-9274-4ab9103bd3fe" controls></video>
+
+</td>
+</tr>
+</table>
+
 ## 功能
 
 - **内容自动梳理**：读取口播视频与带时间码字幕，切成语义段落，提炼每段最终上屏文字，并列出为你需要补录的素材清单，先确认再动手。
