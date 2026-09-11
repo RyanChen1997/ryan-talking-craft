@@ -4,6 +4,27 @@
 
 核心原则：**内容先于画面**。先确认说什么、要什么素材，再决定画面怎么动；动效来自已验证的模板库，而不是每条视频重新研究动画。
 
+同一段中文口播：左边是原始素材，右边是用 ryan-talking-craft 自动包装后的成片（含动效与字幕）。
+
+<table>
+<tr>
+<td width="50%">
+
+**before-cn｜原始口播**
+
+<video src="https://github.com/user-attachments/assets/dddce342-bcd1-42da-b1a9-6c6f2b95db03" controls></video>
+
+</td>
+<td width="50%">
+
+**after-cn｜成片**
+
+<video src="https://github.com/user-attachments/assets/a14930fb-7ac1-425f-9274-4ab9103bd3fe" controls></video>
+
+</td>
+</tr>
+</table>
+
 ## 功能
 
 - **内容自动梳理**：读取口播视频与带时间码字幕，切成语义段落，提炼每段最终上屏文字，并列出为你需要补录的素材清单，先确认再动手。
@@ -13,15 +34,3 @@
 - **一键出成片**：用 Remotion 渲染，默认 16:9 / 1920×1080；素材只做等比适配、不裁切拉伸，段间默认硬切。
 - **分阶段确认门禁**：内容、画面、预览三道确认关，AI 不能替你批准；预览必须是你亲自看的 Studio，而不是渲染文件。
 - **自动质检**：成片连续性扫描、四边出框检查、按计划抽关键帧复核，验证报告区分实测与目测，未跑过的检查不算通过。
-
-## 效果对比
-
-同一段中文口播：`before-cn` 是原始素材，`after-cn` 是用 ryan-talking-craft 自动包装后的成片（含动效与字幕）。
-
-**before-cn｜原始口播**
-
-<video src="https://github.com/user-attachments/assets/dddce342-bcd1-42da-b1a9-6c6f2b95db03" controls></video>
-
-**after-cn｜成片**
-
-<video src="https://github.com/user-attachments/assets/a14930fb-7ac1-425f-9274-4ab9103bd3fe" controls></video>
