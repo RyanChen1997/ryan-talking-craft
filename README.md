@@ -1,76 +1,15 @@
 # Ryan Talking Craft
 
-真人口播视频的内容优先制作 skill，以及独立 Remotion 模板／布局预览工程。
+真人口播视频的自动化剪辑 skill。给它一段真人口播视频和对应字幕，它会自动完成内容梳理、素材准备、动效包装、字幕挂载和成片导出——一条口播稿进，一条带动画和字幕的成片出。
 
-## 第一轮重构状态
+核心原则：**内容先于画面**。先确认说什么、要什么素材，再决定画面怎么动；动效来自已验证的模板库，而不是每条视频重新研究动画。
 
-- v2 流程：内容确认 → 定向素材获取 → 画面确认 → 制作 → QA／预览确认 → 正式导出。
-- 最小 spec：plan.json、assets.json、state.json、qa/；两份确认稿自动生成。
-- 用户录屏允许时间剪辑，禁止裁边、改变比例和局部放大。
-- 分层抽帧与联系表缓存；默认图像长边 480 像素。
-- assets/visual-kit 为共享源码；preview 只负责开发预览，不安装到 skill。
-- 旧规范与旧动画归档到 archive/legacy，不进入正式库、预览或安装产物。
+## 功能
 
-## 启动预览
-
-需要 Node.js 与 npm：
-
-```bash
-npm ci
-npm run preview
-```
-
-终端会打印实际端口。Studio 支持播放、暂停与拖动时间轴；通过右侧 Props 编辑背景、注册配色、测试文字和布局参数（若面板收起，在 Studio 中展开 Props）。
-
-入口：
-
-- Palette-Compare：四套注册配色对照，Props 切换 palette。静态对照页：`preview/palette-demo.html`。
-- Templates：已审阅动效（Typography / Diagram，见 Studio 文件夹）。
-- Layouts：白板左／右 PIP、录屏全屏（隐藏 PIP）、录屏 + 左／右 PIP。
-- Combinations：白板 + PIP + 动效模板。
-- Background-Grid / Background-Captions：网格背景与字幕。
-
-新模板输入不写死文案。测试文字仅在 preview 中提供；结构模式用占位笔画观察运动。真实口播同步与最终审美需要另用用户素材验收，当前人物仅为占位图形。
-
-## 安装用户级 skill
-
-安装逻辑全部位于 `install.sh`，不调用 Python。默认安装到 `~/.pi/agent/skills/ryan-talking-craft`：
-
-```bash
-./install.sh --dry-run
-./install.sh
-# --skills-dir 是 skills 父目录，不是具体 skill 子目录
-./install.sh --skills-dir ~/.agents/skills --dry-run
-# 若同名 skill 已存在，安装器会询问是否删除并重新安装；只接受 yes 或 no
-./install.sh --skills-dir ~/.agents/skills
-```
-
-安装白名单直接写在 `install.sh`：`SKILL.md`、`references/`、`scripts/`、`assets/visual-kit/`、`pyproject.toml`、`uv.lock`。其余顶层内容不安装；白名单目录内的 `.tmp`、缓存和 `node_modules` 也会清理。同名 skill 已存在时，输入 `yes` 会先删除旧目录再安装，输入 `no` 则保留原目录并取消安装。
-
-本轮开发只在临时目录验证安装，没有覆盖本机已安装 skill。
-
-## 使用与测试
-
-AI 从 SKILL.md 读取阶段路由；字段与命令见 references/data-contracts.md 和 references/workflow.md。
-
-```bash
-uv run pytest -q
-npm run typecheck
-npm run preview:bundle
-```
-
-如果历史 `.venv` 已损坏，不必删除它，可使用独立 uv 环境：
-
-```bash
-UV_PROJECT_ENVIRONMENT=/tmp/ryan-talking-craft-refactor-env uv run pytest -q
-```
-
-默认创建 v2，拒绝与旧 spec 混用，尚未提供自动迁移工具。源码仓库的 archive/legacy 仅用于历史参考，不安装、不预览；低层脚本保留的 v1 接口仅为兼容测试，不是新制作入口。
-
-## 文档
-
-- [重构方案](docs/refactoring-plan.md)
-- [模板与布局研究执行指南](docs/template-research-playbook.md)
-- [第一轮实施记录](docs/phase-one-status.md)
-
-已审阅动效以 `assets/visual-kit/catalog.json` 为准；未晋级条目不得当作制作默认候选。
+- **内容自动梳理**：读取口播视频与带时间码字幕，切成语义段落，提炼每段最终上屏文字，并列出为你需要补录的素材清单，先确认再动手。
+- **素材定向获取**：只围绕已确认的需求找素材、核对录屏，带合格条件与搜索预算；用户素材没到位就停在原地，不伪造替代。
+- **自动配动效**：按表达关系从模板库筛候选，为每段自动匹配布局与动效、写入口播触发时机和关键展开顺序；没有表达作用就不加动效。
+- **自动字幕**：口播音轨整理为连续单轨，字幕按时间码自动转成 Caption JSON 并与画面同步，默认开启。
+- **一键出成片**：用 Remotion 渲染，默认 16:9 / 1920×1080；素材只做等比适配、不裁切拉伸，段间默认硬切。
+- **分阶段确认门禁**：内容、画面、预览三道确认关，AI 不能替你批准；预览必须是你亲自看的 Studio，而不是渲染文件。
+- **自动质检**：成片连续性扫描、四边出框检查、按计划抽关键帧复核，验证报告区分实测与目测，未跑过的检查不算通过。
