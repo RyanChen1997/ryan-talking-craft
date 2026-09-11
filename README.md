@@ -8,14 +8,14 @@
 
 <table>
 <tr>
-<td width="50%">
+<td width="50%" valign="top">
 
 **before-cn｜原始口播**
 
 <video src="https://github.com/user-attachments/assets/dddce342-bcd1-42da-b1a9-6c6f2b95db03" controls></video>
 
 </td>
-<td width="50%">
+<td width="50%" valign="top">
 
 **after-cn｜成片**
 
