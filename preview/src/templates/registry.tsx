@@ -1,5 +1,7 @@
 import React from 'react';
 import {Composition, Folder} from 'remotion';
+import {z} from 'zod';
+import {DEFAULT_PALETTE_ID, PALETTE_IDS} from '../../../assets/visual-kit/palettes';
 import {Preview as Preview_bar_chart_growth} from './diagram/data-chart/bar-chart-growth/Preview';
 import {meta as meta_bar_chart_growth} from '../../../assets/visual-kit/templates/diagram/data-chart/bar-chart-growth/Template';
 import {Preview as Preview_chart_grow} from './diagram/data-chart/chart-grow/Preview';
@@ -86,7 +88,10 @@ import {Preview as Preview_typewriter_reveal} from './typography/kinetic-type/ty
 import {meta as meta_typewriter_reveal} from '../../../assets/visual-kit/templates/typography/kinetic-type/typewriter-reveal/Template';
 import {Preview as Preview_word_slot_cycle} from './typography/kinetic-type/word-slot-cycle/Preview';
 import {meta as meta_word_slot_cycle} from '../../../assets/visual-kit/templates/typography/kinetic-type/word-slot-cycle/Template';
-
+import {Preview as Preview_curtain_push} from './typography/before-after/curtain-push-compare/Preview';
+import {meta as meta_curtain_push} from '../../../assets/visual-kit/templates/typography/before-after/curtain-push-compare/Template';
+import {Preview as Preview_era_photo} from './media-display/before-after/era-photo-compare/Preview';
+import {meta as meta_era_photo} from '../../../assets/visual-kit/templates/media-display/before-after/era-photo-compare/Template';
 export const TemplateRegistry: React.FC = () => <>
   <Folder name="Templates">
     <Folder name="Typography">
@@ -122,6 +127,14 @@ export const TemplateRegistry: React.FC = () => <>
         <Composition id="Templates-Typography-KineticType-type-contrast-emphasis" component={Preview_type_contrast_emphasis} width={1280} height={720} fps={30} durationInFrames={meta_type_contrast_emphasis.durationInFrames} />
         <Composition id="Templates-Typography-KineticType-typewriter-reveal" component={Preview_typewriter_reveal} width={1280} height={720} fps={30} durationInFrames={meta_typewriter_reveal.durationInFrames} />
         <Composition id="Templates-Typography-KineticType-word-slot-cycle" component={Preview_word_slot_cycle} width={1280} height={720} fps={30} durationInFrames={meta_word_slot_cycle.durationInFrames} />
+      </Folder>
+    </Folder>
+    <Folder name="BeforeAfter">
+      <Composition id="Templates-Typography-BeforeAfter-curtain-push-compare" component={Preview_curtain_push} schema={z.object({palette: z.enum(PALETTE_IDS)})} defaultProps={{palette: DEFAULT_PALETTE_ID}} width={1920} height={1080} fps={30} durationInFrames={meta_curtain_push.durationInFrames} />
+    </Folder>
+    <Folder name="MediaDisplay">
+      <Folder name="BeforeAfter">
+        <Composition id="Templates-MediaDisplay-BeforeAfter-era-photo-compare" component={Preview_era_photo} schema={z.object({palette: z.enum(PALETTE_IDS)})} defaultProps={{palette: DEFAULT_PALETTE_ID}} width={1920} height={1080} fps={30} durationInFrames={meta_era_photo.durationInFrames} />
       </Folder>
     </Folder>
     <Folder name="Diagram">

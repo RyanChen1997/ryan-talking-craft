@@ -578,6 +578,30 @@
       "code": "templates/diagram/data-chart/unit-grid-proportion/Template.tsx"
     },
     {
+      "id": "era-photo-compare@1",
+      "type": "template",
+      "carrier": "media-display",
+      "informationRelations": [
+        "before-after"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/media-display/before-after/era-photo-compare/README.md",
+      "code": "templates/media-display/before-after/era-photo-compare/Template.tsx"
+    },
+    {
+      "id": "curtain-push-compare@1",
+      "type": "template",
+      "carrier": "typography",
+      "informationRelations": [
+        "before-after"
+      ],
+      "status": "reviewed",
+      "stage": "light",
+      "readme": "templates/typography/before-after/curtain-push-compare/README.md",
+      "code": "templates/typography/before-after/curtain-push-compare/Template.tsx"
+    },
+    {
       "id": "whiteboard-pip-right@1",
       "type": "layout",
       "status": "reviewed",

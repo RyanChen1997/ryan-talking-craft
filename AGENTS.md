@@ -58,8 +58,7 @@ ryan-talking-craft/
 │   ├── tsconfig.json                  # TypeScript 配置
 │   ├── palette-demo.html              # 配色静态对照页
 │   ├── src/                           # Studio 入口与 Composition
-│   ├── public/                        # 预览专用素材
-│   └── collected/                     # 待审阅的收集项（templates/ 不展开）
+│   └── public/                        # 预览专用素材
 │
 ├── scripts/                           # 确定性脚本（安装后可用）
 │   ├── __init__.py                    # 包标记
@@ -89,8 +88,7 @@ ryan-talking-craft/
 │   └── phase-one-status.md            # 第一轮实施记录
 ├── tests/                             # 脚本与安装测试，不安装
 ├── evals/                             # skill 触发评测用例
-├── archive/                           # 旧规范与旧库快照；不安装、不预览、不 import
-└── research/                          # 开发期研究记录（可空；不安装）
+└── archive/                           # 旧规范与旧库快照；不安装、不预览、不 import
 ```
 
 ## 2. preview 与 skill 的关系
@@ -98,3 +96,43 @@ ryan-talking-craft/
 `preview/` 是开发验收台，不是安装产物。动效、布局、背景、配色等视觉件都先在 `preview` 里实现，人工审阅通过后，才写入正式 skill 的 `assets/visual-kit/`。
 
 正常情况下，preview 与 skill 中的这些条目一一对应。未审阅通过的实现只留在 preview，不能当作成片默认候选。
+
+## 3. 新增动效模板的规范
+
+用户说“帮我加几个 XX 的动效模板”，就从本节第 3.1 条开始逐条走。下面几条不是建议，是本次踩过坑后定下的约束。
+
+### 3.1 一个模板一条 Composition，配色不是模板的变体
+
+**同一模板不得为不同 palette／舞台另开 Composition（例如 `-light` / `-dark` 两条）。** 模板接收注入的 `theme`（颜色角色），不接收 palette id，不写死 hex；全片只用一套注册配色，配色由成片级 `plan.palette` 决定。Studio 里配色走 props（`schema` + `defaultProps`），需要透视网格时根据 palette 的 `stage` 自动判断。
+
+为什么：为每套配色开一条 Composition，等于把“机器确定的模板”和“按片确定的配色”绑成组合，既污染 Composition 列表，也会让人误以为模板有多个版本；新增一套配色就要回改所有模板。自查方法：两条 Composition 如果只有配色不同，就是重复条目，合并成一条。
+
+### 3.2 一参考一模板，只摘动效本体
+
+- 一个参考片对应一个模板；参考片 URL 写在 `Template.tsx` 头注释里（README 不写来源，也不另建来源／研究文档）。
+- 摘取的是时序、缓动、错峰与 DOM 结构。参考作者的素材（照片、品牌图标、字体、配色、3D 实物）一律不进库，改成 props 或媒体槽。
+- 参考画幅与成片画幅不同时**重排**，不拉伸、不裁切、不 cover；重排取舍写在 `Template.tsx` 的参数注释里，不另立文档。
+- 不是所有动作都该移植：与表达无关的入场／装饰动作不要顺手带进来，也不要在制作时顺手改参考模板。
+
+### 3.3 参考素材与抽帧纪律
+
+- 只获取公开可访问内容，不绕过登录或权限控制。
+- 下载脚本与全部中间产物（原片、字幕、抽帧、渲染样片）放 `.tmp/`，不进仓库、不进安装产物。
+- 先读字幕与元数据、跑运动量剖面定位事件，再做抽帧；**提交给模型的必须是低分辨率图**（联系表或缩略图），原尺寸帧只在本机核对几何时用。
+- 静态帧不能证明回弹、节奏与连续性。结论里分开写“观察到的”与“未确认的”，不要把抽帧推测说成看过动态。
+
+### 3.4 落点、命名与晋级
+
+1. 先实现到 `preview/src/templates/<carrier>/<relation>/<slug>/`（`Template.tsx` + `Preview.tsx` + `README.md`），注册一条 Composition 等用户审阅；未审阅不得写入正式库。全屏画面类模板用 `preview/src/shared/createFullscreenPreview.tsx`（整幅画布就是模板的舞台），嵌在舞台里的动效仍用 `createTemplatePreview`。
+2. 审阅通过后，`Template.tsx` 与 `README.md` 平移进 `assets/visual-kit/templates/<carrier>/<relation>/<slug>/`，tokens 相对路径改成 `../../../../tokens`；preview 只留 `Preview.tsx` 与 README 副本，Template 的 import 指回正式库。
+3. 同一轮必须一并改完：`catalog.json` 条目（`id` 为 `<slug>@1`）、`tests/test_visual_kit_catalog.py`（carrier 白名单与必查 id）、`SKILL.md` 与 `assets/visual-kit/README.md` 里的库目录清单。
+4. 版本两处都要动，且只动这两处：skill 版本在 `pyproject.toml`，kit 版本在 `assets/visual-kit/tokens.ts` 的 `MOTION_KIT_VERSION`。
+5. 收尾跑 `npm run typecheck`、`pytest`，两个 Composition 各渲一遍并跑 `analyze_frame_signal.py continuity` / `edges`，最后 `./install.sh` 同步到用户 skills 目录。
+
+### 3.5 模板 README 只写现场信息
+
+只写 `ID`、`适用场景`、`动效描述`，必要时加 `空间需求`、`强调色边界`。不写来源与验证状态、不写接入示例。
+
+### 3.6 修改已有模板
+
+模板是已验证资产：制作过程中不顺手改参考模板，要改先在本节流程里走一遍（preview 实现 → 审阅 → 同步晋级）。改动影响已确认画面时，回退到对应阶段重新确认。

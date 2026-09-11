@@ -1,4 +1,4 @@
-export const MOTION_KIT_VERSION = "0.6.0";
+export const MOTION_KIT_VERSION = "0.7.0";
 
 export const FONT_STACK =
   'Inter, "SF Pro Display", "PingFang SC", "Microsoft YaHei", sans-serif';

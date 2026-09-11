@@ -200,6 +200,9 @@ class EdgeContentConfig:
     luminance_threshold: int = 80
     max_strip_ratio: float = 0.005
     roi: RegionOfInterest | None = None
+    # 亮度差不超过该值的条带按“背景平面”处理，不计出框：
+    # 整幅铺满的浅色舞台背景本身就该是亮的，把它当内容会稳定误报。
+    flat_tolerance: int = 8
 
 
 _DEFAULT_EDGE_CONFIG = EdgeContentConfig()
@@ -211,7 +214,9 @@ class EdgeStripMetrics:
     pixels: int
     bright_pixels: int
     bright_ratio: float
+    min_luminance: int
     max_luminance: int
+    flat: bool
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -219,7 +224,9 @@ class EdgeStripMetrics:
             "pixels": self.pixels,
             "bright_pixels": self.bright_pixels,
             "bright_ratio": round(self.bright_ratio, 4),
+            "min_luminance": self.min_luminance,
             "max_luminance": self.max_luminance,
+            "flat": self.flat,
         }
 
 
@@ -576,7 +583,13 @@ def analyze_edge_content(
     *,
     config: EdgeContentConfig = _DEFAULT_EDGE_CONFIG,
 ) -> EdgeContentReport:
-    """Detect bright content inside the outermost strips of each frame."""
+    """Detect bright content inside the outermost strips of each frame.
+
+    A strip whose luminance spread stays inside ``flat_tolerance`` is treated as a
+    background plane, not as content cut off by the frame edge: a full-bleed light
+    stage is bright on every edge while carrying no information. Real edge content
+    (text, card borders, image edges) always introduces a step inside the strip.
+    """
     if not image_paths:
         raise TalkingCraftError("At least one frame image is required")
     _validate_edge_config(config)
@@ -584,6 +597,8 @@ def analyze_edge_content(
     issues: list[FrameSignalIssue] = []
     for frame in frames:
         for strip in frame.strips:
+            if strip.flat:
+                continue
             if strip.bright_ratio <= config.max_strip_ratio:
                 continue
             issues.append(
@@ -883,7 +898,7 @@ def _analyze_edge_frame(path: Path, config: EdgeContentConfig) -> FrameEdgeMetri
         ),
     }
     strips = tuple(
-        _strip_metrics(side, image.crop(box), config.luminance_threshold)
+        _strip_metrics(side, image.crop(box), config.luminance_threshold, config.flat_tolerance)
         for side, box in regions.items()
     )
     return FrameEdgeMetrics(
@@ -895,17 +910,26 @@ def _analyze_edge_frame(path: Path, config: EdgeContentConfig) -> FrameEdgeMetri
     )
 
 
-def _strip_metrics(side: str, strip: Image.Image, threshold: int) -> EdgeStripMetrics:
+def _strip_metrics(
+    side: str,
+    strip: Image.Image,
+    threshold: int,
+    flat_tolerance: int,
+) -> EdgeStripMetrics:
     histogram = strip.histogram()
     pixels = strip.width * strip.height
     bright = sum(histogram[threshold:])
-    top_luminance = [index for index, count in enumerate(histogram) if count > 0]
+    present = [index for index, count in enumerate(histogram) if count > 0]
+    lowest = min(present, default=0)
+    highest = max(present, default=0)
     return EdgeStripMetrics(
         side=side,
         pixels=pixels,
         bright_pixels=bright,
         bright_ratio=bright / pixels if pixels else 0.0,
-        max_luminance=max(top_luminance, default=0),
+        min_luminance=lowest,
+        max_luminance=highest,
+        flat=highest - lowest <= flat_tolerance,
     )
 
 
@@ -1030,6 +1054,8 @@ def _validate_edge_config(config: EdgeContentConfig) -> None:
         raise TalkingCraftError("luminance_threshold must be between 0 and 255")
     if not 0 <= config.max_strip_ratio <= 1:
         raise TalkingCraftError("max_strip_ratio must be between 0 and 1")
+    if not 0 <= config.flat_tolerance <= 255:
+        raise TalkingCraftError("flat_tolerance must be between 0 and 255")
 
 
 def _parse_roi(value: str | None) -> RegionOfInterest | None:
@@ -1191,6 +1217,7 @@ def _run_mode(args: argparse.Namespace) -> tuple[dict[str, object], bool]:
             luminance_threshold=args.luminance_threshold,
             max_strip_ratio=args.max_strip_ratio,
             roi=_parse_roi(args.roi),
+            flat_tolerance=args.flat_tolerance,
         ),
     )
     return report.to_dict(), report.passed
@@ -1267,6 +1294,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     edges.add_argument("--strip-pixels", type=int, default=4)
     edges.add_argument("--luminance-threshold", type=int, default=80)
     edges.add_argument("--max-strip-ratio", type=float, default=0.005)
+    edges.add_argument("--flat-tolerance", type=int, default=8)
     edges.add_argument("--roi", type=str)
     edges.add_argument("--output", type=Path)
     return parser.parse_args(argv)

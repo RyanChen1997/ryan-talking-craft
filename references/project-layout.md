@@ -1,6 +1,6 @@
 # 工程目录
 
-skill 仓库包含 SKILL.md、references、scripts、assets/visual-kit；preview、docs、research、tests 是开发侧资料。
+skill 仓库包含 SKILL.md、references、scripts、assets/visual-kit；preview、docs、tests 是开发侧资料。
 
 实际成片工程：
 

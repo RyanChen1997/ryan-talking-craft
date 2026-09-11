@@ -8,8 +8,6 @@ preview/build/
 preview/out/
 .cache/
 .ruff_cache/
-research/raw/
-research/cache/
 .tmp/
 public
 docs

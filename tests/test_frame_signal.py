@@ -219,6 +219,33 @@ def test_dark_frame_edge_passes(tmp_path: Path) -> None:
     assert report.frames[0].strips[0].max_luminance == 5
 
 
+def test_full_bleed_light_background_passes(tmp_path: Path) -> None:
+    """整幅铺满的浅色舞台：四边全是背景色，不能被当成内容切边。"""
+    path = tmp_path / "full-bleed-light.png"
+    Image.new("L", (320, 180), 249).save(path)
+
+    report = analyze_edge_content((path,))
+
+    assert report.passed
+    assert all(strip.flat for strip in report.frames[0].strips)
+    assert all(strip.max_luminance == 249 for strip in report.frames[0].strips)
+
+
+def test_dark_content_on_light_background_is_blocked(tmp_path: Path) -> None:
+    """浅色背景下，被边缘切掉的深色内容仍然要报出来。"""
+    path = tmp_path / "light-with-content.png"
+    image = Image.new("L", (320, 180), 249)
+    for x in range(140, 180):
+        for y in range(0, 40):
+            image.putpixel((x, y), 20)
+    image.save(path)
+
+    report = analyze_edge_content((path,))
+
+    assert report.passed is False
+    assert {issue.subject.split()[-1] for issue in report.issues} == {"top"}
+
+
 def test_edge_tolerates_single_bright_pixel(tmp_path: Path) -> None:
     path = tmp_path / "stray.png"
     _write_edge_image(path, edge=0, center=200, size=200)

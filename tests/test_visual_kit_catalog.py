@@ -48,6 +48,8 @@ def test_catalog_reviewed_templates_match_files() -> None:
         "numbered-step-stack@1",
         "source-converge@1",
         "flying-words@1",
+        "era-photo-compare@1",
+        "curtain-push-compare@1",
     }
     disk = {
         f"{path.parent.name}@1"
@@ -56,10 +58,9 @@ def test_catalog_reviewed_templates_match_files() -> None:
     catalog_ids = {entry["id"] for entry in templates}
     assert catalog_ids == disk
     assert not (KIT / "templates/typography/ordered-steps").exists()
-    assert not (KIT / "templates/typography/before-after").exists()
     for entry in templates:
         assert entry["status"] == "reviewed"
-        assert entry["carrier"] in {"typography", "diagram"}
+        assert entry["carrier"] in {"typography", "diagram", "media-display"}
         assert entry["informationRelations"]
         assert (KIT / entry["readme"]).is_file()
         assert (KIT / entry["code"]).is_file()

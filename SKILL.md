@@ -63,7 +63,7 @@ uv run --project <skill-dir> --no-dev python <skill-dir>/scripts/bootstrap_spec.
 
 ### 3. 画面方案确认
 
-先读画面编排原则，再按表达关系筛模板索引，只读候选说明与动态预览，不通看整个库。当前 visual-kit 收录 catalog 中 `status: reviewed` 的动效模板（typography/emphasis、typography/kinetic-type、diagram/data-chart）、五套舞台布局（白板左／右 PIP、录屏全屏、录屏 + 左／右 PIP）、默认网格背景和四套配色。只从 `assets/visual-kit/catalog.json` 选择，不得从归档中擅自加载旧组件，也不得使用未晋级的 preview staging。模板按动效参考使用：摘取动效本体到项目自己的场景组件，参考模板只读；演示文案与演示白底是占位，替换为本段已确认内容与 `theme`（见 `references/visual-principles.md`「使用模板」）。
+先读画面编排原则，再按表达关系筛模板索引，只读候选说明与动态预览，不通看整个库。当前 visual-kit 收录 catalog 中 `status: reviewed` 的动效模板（typography/emphasis、typography/kinetic-type、typography/before-after、media-display/before-after、diagram/data-chart）、五套舞台布局（白板左／右 PIP、录屏全屏、录屏 + 左／右 PIP）、默认网格背景和四套配色。只从 `assets/visual-kit/catalog.json` 选择，不得从归档中擅自加载旧组件，也不得使用未晋级的 preview staging。模板按动效参考使用：摘取动效本体到项目自己的场景组件，参考模板只读；演示文案与演示白底是占位，替换为本段已确认内容与 `theme`（见 `references/visual-principles.md`「使用模板」）。
 
 逐段填写 visual：布局、模板、口播触发与关键展开顺序、媒体源时间范围。录屏窗口对照源片实测运动量剖面选取，并在写完后用 `analyze_frame_signal.py windows` 核一遍（见 `references/visual-planning.md`）。全片填写 `background` 与 `palette`：先定背景，再按 `color-planning.md` 用人物口播联系表从已注册方案里选一套，不写进模板，不现场发明 hex。稳定模板复用参数；允许无模板的静态画面。齐全后运行 `advance --target VISUAL_REVIEW`，展示生成的画面稿，必要时提供代表性小样，等待确认。
 

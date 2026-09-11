@@ -8,7 +8,7 @@
 成片级的三条确定性扫描是纯数值检查（把视频解成低分辨率灰度帧后算标量，不提交图片给模型），不靠目测：
 
 - **连续性**：`analyze_frame_signal.py continuity <成片> --plan <spec-dir>/plan.json [--accept-frames <意图内转场帧>]`。段边界（plan 的段起点）上的硬切属预期；段内的黑帧始终 `blocked`；亮度瞬变按**相对深度**分级：拿走基线亮度 50% 以上为 `blocked`（整屏从黑淡入、卡片从透明淡入），8%–50% 为 `needs_review`，变化量尖峰为 `needs_review`。逐条看对应帧。有个已知的固有项：**暗底上的 opacity 交叉溶解必然在中点变暗**（两层各半透明、深色舞台透出，实测约 20%），会稳定出现在 `needs_review` 里，属预期，看一眼确认平滑即可，不要当缺陷去改；真正要拦的是深度瞬变和未被任何转场解释的突变。有明确表达意图的转场可用 `--accept-frames` 记下，并写进报告。
-- **出框**：`analyze_frame_signal.py edges <抽帧 images...>`。四边窄条出现成片亮像素（文字、卡片被画面边缘切掉）即 `blocked`；亮舞台背景触发的误报改用 `--roi` 或调 `--luminance-threshold`。
+- **出框**：`analyze_frame_signal.py edges <抽帧 images...>`。四边窄条出现成片亮像素（文字、卡片被画面边缘切掉）即 `blocked`。亮舞台背景不算内容：条带亮度跨度 ≤ `--flat-tolerance`（默认 8）时按背景平面跳过；整幅铺满的浅色画面因此不再误报（可在输出里看到该条带 `flat: true`）。真要收紧时改 `--roi` 或调 `--luminance-threshold`；深色背景下被切掉的内容仍按原来的绝对亮度规则报出。
 - **窗口**：画面确认前跑 `analyze_frame_signal.py windows`，见 [visual-planning.md](visual-planning.md)。
 
 **关键帧复核**（给出预览前必做）：`build_keyframe_review.py <渲染出的成片> <spec-dir>`。它按 plan 逐段抽完成态关键帧（默认每段 1 帧、取段内 85% 位置，`--per-segment`／`--include-boundaries` 可加密度），拼成低分辨率联系表，并逐帧附上“本该呈现什么”（布局、模板、上屏文字、beats）。脚本自动判定四边出框与成片帧数是否与 plan 一致；**文字重叠、文字出画、内容与 plan 不符必须逐张看联系表**，逐段比对预期与实际，可疑帧按 `image` 路径单独看原尺寸。低分辨率拼图只用于定位。结论与联系表路径写进 `qa/production.json`。注意：agent 设计了自己的画面，因此“预期”是已知的——看不到预期内容与看不到缺陷是同一件事。

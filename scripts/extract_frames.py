@@ -12,6 +12,12 @@ from pathlib import Path
 from common import TalkingCraftError, run_command, write_json
 from inspect_media import inspect_media
 
+# 快速 seek 抓不到片尾最后几帧：采样点必须留在可解码范围内，否则整批抽帧会失败。
+_FRAME_TAIL_GUARD_SECONDS = 0.2
+# 落在范围外时逐个回退重试，避免个别时间点把整批带崩。
+_FRAME_RETRY_STEP_SECONDS = 0.25
+_FRAME_RETRY_ATTEMPTS = 3
+
 
 @dataclass(frozen=True)
 class ExtractConfig:
@@ -79,10 +85,7 @@ def extract_frames(config: ExtractConfig) -> ExtractResult:
     )
     frames: list[tuple[float, Path]] = []
     for time_value in times:
-        clamped = min(max(0.0, time_value), max(0.0, media.duration_seconds - 0.1))
-        frame_path = frames_dir / f"{round(clamped * 1000):09d}ms.jpg"
-        extract_frame_at(media.path, clamped, frame_path, width=config.width)
-        frames.append((round(clamped, 3), frame_path))
+        frames.append(_extract_frame_with_fallback(media.path, time_value, frames_dir, width=config.width))
 
     contact_sheet = _make_contact_sheet(tuple(path for _, path in frames), frames_dir)
     result = ExtractResult(
@@ -127,14 +130,44 @@ def extract_frame_at(
     return output_path
 
 
+def _extract_frame_with_fallback(
+    input_path: Path,
+    time_seconds: float,
+    frames_dir: Path,
+    *,
+    width: int,
+) -> tuple[float, Path]:
+    """Extract one frame, stepping back if the timestamp is not decodable.
+
+    ``-ss`` before ``-i`` cannot always produce a frame very close to the end of
+    the file. A missing frame used to abort the whole batch (and only much later,
+    as a confusing ``FileNotFoundError`` while building the contact sheet).
+    """
+    for attempt in range(_FRAME_RETRY_ATTEMPTS + 1):
+        value = max(0.0, time_seconds - attempt * _FRAME_RETRY_STEP_SECONDS)
+        frame_path = frames_dir / f"{round(value * 1000):09d}ms.jpg"
+        if frame_path.is_file():
+            frame_path.unlink()
+        try:
+            extract_frame_at(input_path, value, frame_path, width=width)
+        except TalkingCraftError:
+            continue
+        if frame_path.is_file() and frame_path.stat().st_size > 0:
+            return round(value, 3), frame_path
+    raise TalkingCraftError(
+        f"Cannot extract a decodable frame at or before {time_seconds:.3f}s: {input_path}"
+    )
+
+
 def _representative_times(duration: float, sample_count: int) -> tuple[float, ...]:
     if sample_count < 3:
         raise TalkingCraftError("sample_count must be at least 3")
     # Coarse survey, not a claim that every short event has been observed.
-    anchors = [max(0.0, duration - 0.1) * index / (sample_count - 1) for index in range(sample_count)]
+    last = max(0.0, duration - _FRAME_TAIL_GUARD_SECONDS)
+    anchors = [last * index / (sample_count - 1) for index in range(sample_count)]
     unique = sorted(
         {
-            round(min(value, duration - 0.001), 3)
+            round(min(value, last), 3)
             for value in anchors
             if value < duration
         }
