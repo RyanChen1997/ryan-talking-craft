@@ -25,7 +25,9 @@
 </tr>
 </table>
 
-![内测优化中，点个 star 持续关注](assets/readme/star-banner.png)
+<p align="center">
+  <img src="assets/readme/star-banner.png" alt="内测优化中，点个 star 持续关注" width="559">
+</p>
 
 ## 功能
 
