@@ -16,10 +16,12 @@
 
 ## 效果对比
 
-**before-cn**
+同一段中文口播：`before-cn` 是原始素材，`after-cn` 是用 ryan-talking-craft 自动包装后的成片（含动效与字幕）。
+
+**before-cn｜原始口播**
 
 <video src="https://github.com/user-attachments/assets/dddce342-bcd1-42da-b1a9-6c6f2b95db03" controls></video>
 
-**before-en**
+**after-cn｜成片**
 
-<video src="https://github.com/user-attachments/assets/f40c7b25-127e-4bb7-a9e2-ccd5879bf4f2" controls></video>
+<video src="https://github.com/user-attachments/assets/a14930fb-7ac1-425f-9274-4ab9103bd3fe" controls></video>
